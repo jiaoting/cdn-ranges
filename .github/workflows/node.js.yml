@@ -18,8 +18,10 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
+    - run: echo "$(date)" > output/.lastrun
     - run: npm ci
     - run: node download --output output/all-cdn.txt
+    - run: for f in providers/*.js; do FILENAME=${f%%.*}; FILENAME=${FILENAME##*/}; node download --provider ${FILENAME} --output output/${FILENAME}.txt;  done;
     - uses: actions/upload-artifact@v2
       with:
         path: output/
