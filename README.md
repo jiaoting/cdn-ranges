@@ -5,6 +5,11 @@ This uses publicly available lists of IP ranges, provided by most providers, and
 
 This was heavily inspired by [Project Discovery's cdncheck](https://github.com/projectdiscovery/cdncheck).
 
+## 
+Ranges are updated every 15 Minutes and deployed [here](https://github.com/schniggie/cdn-ranges/output).
+
+[![Node.js CI](https://github.com/schniggie/cdn-ranges/actions/workflows/node.js.yml/badge.svg)](https://github.com/schniggie/cdn-ranges/actions/workflows/node.js.yml)
+
 ## CDN Providers
 Provider | ASN or Public List
 --- | ---
