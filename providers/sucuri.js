@@ -1,5 +1,5 @@
 const bgpView = require('../utils/bgpview')
 
 module.exports = () => {
-  return bgpView('30148')
+  return bgpView(["30148"])
 }
