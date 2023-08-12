@@ -6,7 +6,7 @@ This uses publicly available lists of IP ranges, provided by most providers, and
 This was heavily inspired by [Project Discovery's cdncheck](https://github.com/projectdiscovery/cdncheck).
 
 ## 
-Ranges are updated every 15 Minutes and deployed [here](https://github.com/schniggie/cdn-ranges/tree/main/output).
+Ranges are updated every 60 Minutes and deployed [here](https://github.com/schniggie/cdn-ranges/tree/main/output).
 
 [![Node.js CI](https://github.com/schniggie/cdn-ranges/actions/workflows/node.js.yml/badge.svg)](https://github.com/schniggie/cdn-ranges/actions/workflows/node.js.yml)
 
@@ -23,7 +23,7 @@ Fastly | https://api.fastly.com/public-ip-list
 Incapsula | https://my.incapsula.com/api/integration/v1/ips
 Limelight (Edg.io) | "AS22822", "AS23059", "AS26506","AS38622", "AS55429"
 MaxCDN | https://support.maxcdn.com/hc/en-us/article_attachments/360051920551/maxcdn_ips.txt
-Qrator | AS200449
+Qrator | "AS200449"
 StackPath | "AS12989", "AS18607", "AS20446", "AS33438"
 StormWall | "AS59796"
 Sucuri | "AS30148"
