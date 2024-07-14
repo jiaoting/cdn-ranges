@@ -4,6 +4,8 @@
 name: Node.js CI
 
 on:
+  watch:
+    types: started
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '0 * * * *'
@@ -18,7 +20,7 @@ jobs:
     - uses: actions/setup-node@v3
     - run: echo "$(date)" > output/.lastrun
     - run: npm ci
-    - run: node download --output output/all-cdn.txt
+    - run: node download --output output/allcdn.txt
     - run: for f in providers/*.js; do FILENAME=${f%%.*}; FILENAME=${FILENAME##*/}; node download --provider ${FILENAME} --output output/${FILENAME}.txt;  done;
     - uses: actions/upload-artifact@v3
       with:
