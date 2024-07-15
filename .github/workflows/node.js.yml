@@ -28,7 +28,7 @@ jobs:
         
     - name: Combine
       run : |
-        npm ci
+        npm install
         node download --output output/allcdn.txt
         for f in providers/*.js; do FILENAME=${f%%.*}; FILENAME=${FILENAME##*/}; node download --provider ${FILENAME} --output output/${FILENAME}.txt;  done;
 
