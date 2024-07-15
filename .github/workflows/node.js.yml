@@ -30,7 +30,7 @@ jobs:
     - name: Update list
       run : |
         echo "$(date)" > output/.lastrun
-        npm install
+        npm ci
         node download --output output/all-cdn.txt
 
         for f in providers/*.js; do 
