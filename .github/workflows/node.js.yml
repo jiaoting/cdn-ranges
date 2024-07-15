@@ -7,34 +7,26 @@ on:
   watch:
     types: started
   schedule:
-    - cron: '00 0 * * *'
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 * * * *'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-  
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-          
-    - name: Set git identity
-      run : |
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --global user.name "github-actions[bot]"
-        sudo timedatectl set-timezone "Asia/Shanghai"
-        
-    - name: Combine
-      run : |
-        npm install
-        node download --output output/allcdn.txt
-        for f in providers/*.js; do FILENAME=${f%%.*}; FILENAME=${FILENAME##*/}; node download --provider ${FILENAME} --output output/${FILENAME}.txt;  done;
+  download:
 
-    - name: Apply
-      run: |
-        Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
-        git add .
-        git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
-        git push -f
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+    - run: echo "$(date)" > output/.lastrun
+    - run: npm ci
+    - run: node download --output output/all-cdn.txt
+    - run: for f in providers/*.js; do FILENAME=${f%%.*}; FILENAME=${FILENAME##*/}; node download --provider ${FILENAME} --output output/${FILENAME}.txt;  done;
+    - uses: actions/upload-artifact@v3
+      with:
+        path: output/
+    - run: |
+        git config --global user.name 'node.js Action'
+        git config --global user.email 'root@schniggie.de'
+        git commit -am "Automated commit, updated cdn ranges"
+        git push
