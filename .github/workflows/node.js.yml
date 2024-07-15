@@ -11,29 +11,41 @@ on:
     - cron: '0 * * * *'
 
 jobs:
-  download:
-
+  build:
     runs-on: ubuntu-latest
 
-steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: echo "$(date)" > output/.lastrun
-    - run: npm install
-    - run: node download --output output/all-cdn.txt
-    - run: |
+        
+    - name: Set git identity
+      run : |
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        sudo timedatectl set-timezone "Asia/Shanghai"
+
+    - name: Update list
+      run : |
+        echo "$(date)" > output/.lastrun
+        npm install
+        node download --output output/all-cdn.txt
+
         for f in providers/*.js; do 
           FILENAME=${f%%.*}; 
           FILENAME=${FILENAME##*/}; 
           node download --provider ${FILENAME} --output output/${FILENAME}.txt;  
         done;
-    - uses: actions/upload-artifact@v4
+        
+      uses: actions/upload-artifact@v4
       with:
         path: output/
-    - run: |
-        git config --global user.name 'node.js Action'
-        git config --global user.email 'root@example.com'
-        git commit -am "Automated commit, updated cdn ranges"
-        git push
+
+     - name: Apply
+      run: |
+        Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
+        git add .
+        git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
+        git push -f
