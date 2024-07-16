@@ -14,18 +14,36 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x, 20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 'latest'
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    
+    - name: Update list
+      run : |
+        echo "$(date)" > output/.lastrun
+        npm ci
+        node download --output output/all-cdn.txt
+
+        for f in providers/*.js; do 
+          FILENAME=${f%%.*}; 
+          FILENAME=${FILENAME##*/}; 
+          node download --provider ${FILENAME} --output output/${FILENAME}.txt;  
+        done;
+        
+      uses: actions/upload-artifact@v4
+      with:
+        path: output/
+
+     - name: Apply
+      run: |
+        Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
+        git add .
+        git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
+        git push -f
