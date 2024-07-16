@@ -23,8 +23,10 @@ jobs:
     - name: Download list
       run : |
         echo "$(date)" > output/.lastrun
-        npm audit fix --force
         npm install
+        npm audit fix
+        npm audit fix --force
+        npm audit
 
         node download --output output/all-cdn.txt
 
