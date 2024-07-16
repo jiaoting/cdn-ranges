@@ -12,18 +12,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 'latest'
         cache: 'npm'
-    - run: npm ci
     
-    - name: Update list
+    - name: Download list
       run : |
         echo "$(date)" > output/.lastrun
+
         npm ci
+
         node download --output output/all-cdn.txt
 
         for f in providers/*.js; do 
@@ -31,7 +34,8 @@ jobs:
           FILENAME=${FILENAME##*/}; 
           node download --provider ${FILENAME} --output output/${FILENAME}.txt;  
         done;
-        
+
+    - name: Upload files
       uses: actions/upload-artifact@v4
       with:
         path: output/
